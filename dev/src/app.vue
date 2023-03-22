@@ -22,111 +22,101 @@
   </div>
 </template>
 
-<script>
-import mixinUtils from "./utils";
+<script setup lang="ts">
+import { Component, computed, nextTick, onMounted, ref } from "vue";
+import { prettyJSON } from "@/utils";
 
-export default {
-  mixins: [mixinUtils],
-
-  data() {
-    return {
-      isNewModel: false,
-
-      selected: [],
-
-      model: {
-        first_name: "David",
-        last_name: "Higgins",
-        status: true
-      },
-
-      schema: {
-        fields: [
-          {
-            type: "input",
-            inputType: "text",
-            label: "First Name",
-            model: "first_name",
-            attributes: {
-              input: {
-                "data-toggle": "tooltip"
-              },
-              wrapper: {
-                "data-target": "input"
-              }
-            }
+const isNewModel = ref(false),
+  selected = ref<any[]>([]),
+  model = ref({
+    first_name: "David",
+    last_name: "Higgins",
+    status: true
+  }),
+  schema = {
+    fields: [
+      {
+        type: "input",
+        inputType: "text",
+        label: "First Name",
+        model: "first_name",
+        attributes: {
+          input: {
+            "data-toggle": "tooltip"
+          },
+          wrapper: {
+            "data-target": "input"
           }
-          // {
-          // 	type: "checkbox",
-          // 	label: "Active",
-          // 	model: "status",
-          // 	attributes: {
-          // 		input: {
-          // 			"data-toggle": "tooltip"
-          // 		}
-          // 	}
-          // },
-          // {
-          // 	type: "input",
-          // 	inputType: "color",
-          // 	label: "Color",
-          // 	model: "color",
-          // 	attributes: {
-          // 		input: {
-          // 			"data-target": "tooltip"
-          // 		}
-          // 	}
-          // },
-          // {
-          // 	type: "submit",
-          // 	buttonText: "Change Previous Type",
-          // 	attributes: {
-          // 		input: {
-          // 			"data-target": "toggle"
-          // 		}
-          // 	},
-          // 	onSubmit: () => {
-          // 		// this.schema.fields[2].type = "input";
-          // 		if (this.schema.fields[2].inputType === "color") {
-          // 			this.schema.fields[2].inputType = "text";
-          // 		} else {
-          // 			this.schema.fields[2].inputType = "color";
-          // 		}
-          // 	}
-          // }
-        ]
-      },
-
-      formOptions: {
-        validateAfterLoad: true,
-        validateAfterChanged: true,
-        validateBeforeSave: true
+        }
       }
-    };
+      // {
+      // 	type: "checkbox",
+      // 	label: "Active",
+      // 	model: "status",
+      // 	attributes: {
+      // 		input: {
+      // 			"data-toggle": "tooltip"
+      // 		}
+      // 	}
+      // },
+      // {
+      // 	type: "input",
+      // 	inputType: "color",
+      // 	label: "Color",
+      // 	model: "color",
+      // 	attributes: {
+      // 		input: {
+      // 			"data-target": "tooltip"
+      // 		}
+      // 	}
+      // },
+      // {
+      // 	type: "submit",
+      // 	buttonText: "Change Previous Type",
+      // 	attributes: {
+      // 		input: {
+      // 			"data-target": "toggle"
+      // 		}
+      // 	},
+      // 	onSubmit: () => {
+      // 		// this.schema.fields[2].type = "input";
+      // 		if (this.schema.fields[2].inputType === "color") {
+      // 			this.schema.fields[2].inputType = "text";
+      // 		} else {
+      // 			this.schema.fields[2].inputType = "color";
+      // 		}
+      // 	}
+      // }
+    ]
   },
-
-  mounted() {
-    this.$nextTick(function () {
-      window.app = this;
-    });
+  formOptions = {
+    validateAfterLoad: true,
+    validateAfterChanged: true,
+    validateBeforeSave: true
   },
+  form = ref<any>();
 
-  methods: {
-    showWarning() {
-      if (this.$refs.form && this.$refs.form.errors) {
-        return this.$refs.form.errors.length > 0;
-      }
-    },
+const prettyModel = computed(() => prettyJSON(model.value));
 
-    onValidated(res, errors) {
-      console.log("VFG validated:", res, errors);
-    },
+onMounted(() => {
+  nextTick(function () {
+    // window.app = this;
+  });
+});
 
-    modelUpdated(newVal, schema) {
-      console.log("main model has updated", newVal, schema);
-    }
+function showWarning() {
+  if (form.value && form.value.errors) {
+    return form.value.errors.length > 0;
   }
-};
+}
+
+function onValidated(res: any, errors: any) {
+  console.log("VFG validated:", res, errors);
+}
+
+function modelUpdated(newVal: any, schema: any) {
+  console.log("main model has updated", newVal, schema);
+}
 </script>
 
 <style lang="scss">
