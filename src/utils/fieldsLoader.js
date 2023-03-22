@@ -7,7 +7,7 @@ import fieldInput from "../fields/core/fieldInput.vue";
 // import fieldChecklist from "../fields/core/fieldChecklist.vue";
 // import fieldRadios from "../fields/core/fieldRadios.vue";
 
-let fieldComponents = {};
+const fieldComponents = {};
 
 // let coreFields = require.context("../fields/core", false, /^\.\/field([\w-_]+)\.vue$/);
 //
@@ -26,11 +26,11 @@ let fieldComponents = {};
 // }
 
 export default {
-	fieldInput,
-	// fieldCheckbox,
-	// fieldLabel,
-	// fieldSubmit,
-	// fieldSelect,
-	// fieldChecklist,
-	// fieldRadios
+  fieldInput
+  // fieldCheckbox,
+  // fieldLabel,
+  // fieldSubmit,
+  // fieldSelect,
+  // fieldChecklist,
+  // fieldRadios
 };

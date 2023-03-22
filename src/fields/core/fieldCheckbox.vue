@@ -6,12 +6,12 @@
 import abstractField from "../abstractField";
 
 export default {
-	mixins: [abstractField]
+  mixins: [abstractField]
 };
 </script>
 
 <style lang="scss">
 .vue-form-generator .field-checkbox input {
-	margin-left: 12px;
+  margin-left: 12px;
 }
 </style>

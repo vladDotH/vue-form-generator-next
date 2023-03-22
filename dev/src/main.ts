@@ -1,14 +1,14 @@
-import Vue, {configureCompat} from "vue";
+import Vue, { configureCompat } from "vue";
 import VueFormGenerator from "../../src";
 
 Vue.use(VueFormGenerator);
 
 // import { configureCompat } from "@vue/compat";
 
-configureCompat({MODE:2});
+configureCompat({ MODE: 2 });
 
 import App from "./app.vue";
 
 new Vue({
-	...App
+  ...App
 }).$mount("#app");

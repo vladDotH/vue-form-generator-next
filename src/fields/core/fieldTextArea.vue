@@ -18,11 +18,8 @@
 import abstractField from "../abstractField";
 
 export default {
-	mixins: [abstractField]
+  mixins: [abstractField]
 };
 </script>
 
-
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>
