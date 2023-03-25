@@ -25,6 +25,12 @@ export interface FieldSchema<M = any, V = any> {
   onChanged: (model: M, newVal: V, oldVal: V, field: FieldSchema<M, V>) => void;
   validator: string | string[];
   onValidated: (model: M, errors: any[], field: FieldSchema<M, V>) => void;
+  validateDebounceTime?: number;
+  max?: number;
+  min?: number;
+  placeholder?: string;
+  required?: boolean;
+  rows?: number;
 }
 
 export interface FieldGroup<M = any> {
@@ -45,19 +51,17 @@ export interface FieldProps {
   disabled: boolean;
 }
 
-export interface FieldPropsWrap {
-  vfgProps: FieldProps;
-}
-
 export const FieldPropsObject = {
-  vfg: {} as any,
-  model: {} as any,
-  schema: {} as FieldSchema,
-  formOptions: {} as FormOptions,
+  vfg: Object,
+  model: Object,
+  schema: Object,
+  formOptions: Object,
   disabled: Boolean
 };
 
 export interface FieldEmits {
   (e: "validated", isValid: boolean, errors: any[], vfg: any): void;
-  (e: "model-updated", value: any, model: string): void;
+  (e: "model-updated", value: any, model: any): void;
 }
+
+export const FieldEmitsObject = ["validated", "model-updated"];
