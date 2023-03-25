@@ -19,10 +19,15 @@ import { FieldEmits, FieldProps, FormSchema } from "./fields";
 import validators from "../utils/validators";
 import { slugifyFormID } from "../utils/schema";
 
-function convertValidator(validator) {
+function convertValidator(validator: string | CallableFunction) {
   if (isString(validator)) {
-    if (validators[validator] != null) return validators[validator];
-    else {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (validators[validator] != null) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      return validators[validator];
+    } else {
       console.warn(`'${validator}' is not a validator function!`);
       return null; // caller need to handle null
     }
@@ -46,7 +51,7 @@ function attributesDirective(
   });
 }
 
-export const attributes: Directive = {
+export const vAttributes: Directive = {
   mounted: attributesDirective,
   updated: attributesDirective
 };
@@ -67,12 +72,12 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
 
   const clearValidationErrors = () => errors.value.splice(0);
 
-  const validate = (calledParent?) => {
+  const validate = (calledParent?: boolean) => {
     clearValidationErrors();
     const validateAsync = props.formOptions.validateAsync ?? false;
     const validateDisabled = props.formOptions.validateDisabled ?? false;
     const validateReadonly = props.formOptions.validateReadonly ?? false;
-    let results = [];
+    let results: any[] = [];
 
     if (
       props.schema.validator &&
@@ -98,7 +103,7 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
         } else {
           const result = validator(value.value, props.schema, props.model);
           if (result && isFunction(result.then)) {
-            result.then((err) => {
+            result.then((err: any) => {
               if (err) {
                 errors.value.push(...err);
               }
@@ -112,8 +117,8 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
       });
     }
 
-    const handleErrors = (errorsHandled) => {
-      let fieldErrors = [];
+    const handleErrors = (errorsHandled: any[]) => {
+      let fieldErrors: any[] = [];
       forEach(arrayUniq(errorsHandled), (err) => {
         if (isArray(err) && err.length > 0) {
           fieldErrors = fieldErrors.concat(err);
@@ -224,7 +229,7 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
       let val;
       if (isFunction(props.schema.get)) {
         val = props.schema.get(props.model);
-      } else {
+      } else if (props.schema.model) {
         val = props.model[props.schema.model];
       }
 
