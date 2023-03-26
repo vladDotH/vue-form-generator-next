@@ -230,7 +230,7 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
       if (isFunction(props.schema.get)) {
         val = props.schema.get(props.model);
       } else if (props.schema.model) {
-        val = props.model[props.schema.model];
+        val = objGet(props.model, props.schema.model);
       }
 
       return formatValueToField(val);
