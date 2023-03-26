@@ -19,6 +19,7 @@ import { FieldEmits, FieldProps, FormSchema } from "./fields";
 import validators from "../utils/validators";
 import { slugifyFormID } from "../utils/schema";
 
+// TODO validators types
 function convertValidator(validator: string | CallableFunction) {
   if (isString(validator)) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -173,7 +174,7 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
     const n = keys.length;
     while (i < n) {
       const key = keys[i];
-      if (i < n - 1)
+      if (i < n - 1) {
         if (model[key] !== undefined) {
           // Found parent property. Step in
           model = model[key];
@@ -182,7 +183,7 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
           model[key] = {};
           model = model[key];
         }
-      else {
+      } else {
         // Set final property value
         model[key] = value;
         return;
