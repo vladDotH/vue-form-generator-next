@@ -57,6 +57,7 @@ export const vAttributes: Directive = {
   updated: attributesDirective
 };
 
+// TODO: drop context binding to onValidated, validators & inside emit('validated')
 export const useField = (props: FieldProps, emit: FieldEmits) => {
   const instance = getCurrentInstance();
 
