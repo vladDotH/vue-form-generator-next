@@ -54,10 +54,10 @@ function checkEmpty(value, required, messages = resources) {
   return null;
 }
 
-function msg(text) {
-  if (text != null && arguments.length > 1) {
-    for (let i = 1; i < arguments.length; i++) {
-      text = text.replace("{" + (i - 1) + "}", arguments[i]);
+function msg(text, ...args) {
+  if (text != null && args.length > 0) {
+    for (let i = 0; i < args.length; i++) {
+      text = text.replace("{" + (i - 1) + "}", args[i]);
     }
   }
 
