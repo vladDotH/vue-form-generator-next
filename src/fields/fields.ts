@@ -38,9 +38,9 @@ export interface FieldGroup<M = any> {
   fields: FieldSchema<M>[];
 }
 
-export interface FormSchema {
-  fields: FieldSchema[];
-  groups: FieldGroup[];
+export interface FormSchema<M = any> {
+  fields: FieldSchema<M>[];
+  groups: FieldGroup<M>[];
 }
 
 export interface FieldProps {
