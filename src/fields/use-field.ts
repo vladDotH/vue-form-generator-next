@@ -15,7 +15,7 @@ import {
   getCurrentInstance,
   ref
 } from "vue";
-import { FieldEmits, FieldProps, FormSchema } from "./fields";
+import { FieldEmits, FieldProps, FieldSchema } from "./fields";
 import validators from "../utils/validators";
 import { slugifyFormID } from "../utils/schema";
 
@@ -69,7 +69,7 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
     formatValueToField = (value: any) => value,
     formatValueToModel = (value: any) => value;
 
-  const getFieldID = (schema: FormSchema, unique = false) => {
+  const getFieldID = (schema: FieldSchema, unique = false) => {
     const idPrefix = props.formOptions.fieldIdPrefix ?? "";
     return slugifyFormID(schema, idPrefix) + (unique ? "-" + uniqueId() : "");
   };
