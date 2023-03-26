@@ -18,7 +18,6 @@
 
 <script setup lang="ts">
 import { vAttributes, useField } from "../use-field";
-import { defineProps, defineEmits } from "vue";
 import {
   FieldProps,
   FieldEmits,
@@ -26,12 +25,15 @@ import {
   FieldEmitsObject
 } from "../fields";
 
-const props = defineProps(FieldPropsObject);
-const emits = defineEmits(FieldEmitsObject);
+const rawProps = defineProps(FieldPropsObject);
+const props = rawProps as FieldProps;
+
+const rawEmits = defineEmits(FieldEmitsObject);
+const emits = rawEmits as FieldEmits;
 
 const { getFieldID, clearValidationErrors, validate, value } = useField(
-  props as FieldProps,
-  emits as FieldEmits
+  props,
+  emits
 );
 
 defineExpose({ validate, clearValidationErrors });
