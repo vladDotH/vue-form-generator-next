@@ -58,6 +58,8 @@ export const vAttributes: Directive = {
 };
 
 export const useField = (props: FieldProps, emit: FieldEmits) => {
+  const instance = getCurrentInstance();
+
   const errors = ref<any[]>([]),
     debouncedValidateFunc = ref<any>(null),
     debouncedFormatFunc = ref<any>(null);
@@ -88,13 +90,11 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
       const validators = [];
       if (!isArray(props.schema.validator)) {
         validators.push(
-          convertValidator(props.schema.validator).bind(getCurrentInstance())
+          convertValidator(props.schema.validator).bind(instance)
         );
       } else {
         forEach(props.schema.validator, (validator) => {
-          validators.push(
-            convertValidator(validator).bind(getCurrentInstance())
-          );
+          validators.push(convertValidator(validator).bind(instance));
         });
       }
 
@@ -109,7 +109,7 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
                 errors.value.push(...err);
               }
               const isValid = errors.value.length === 0;
-              emit("validated", isValid, errors.value, getCurrentInstance());
+              emit("validated", isValid, errors.value, instance);
             });
           } else if (result) {
             results = results.concat(result);
@@ -129,7 +129,7 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
       });
       if (isFunction(props.schema.onValidated)) {
         props.schema.onValidated.call(
-          getCurrentInstance(),
+          instance,
           props.model,
           fieldErrors,
           props.schema
@@ -138,7 +138,7 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
 
       const isValid = fieldErrors.length === 0;
       if (!calledParent) {
-        emit("validated", isValid, fieldErrors, getCurrentInstance());
+        emit("validated", isValid, fieldErrors, instance);
       }
       errors.value = fieldErrors;
       return fieldErrors;
