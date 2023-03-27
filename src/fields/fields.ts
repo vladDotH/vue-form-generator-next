@@ -1,3 +1,5 @@
+import FormWrapper from "../FormWrapper.vue";
+
 export interface FormOptions {
   validateAfterLoad: boolean;
   validateAfterChanged: boolean;
@@ -43,6 +45,10 @@ export interface FieldSchema<M = any, V = any> {
   placeholder?: string;
   required?: boolean;
   rows?: number;
+  labelClasses?: string;
+  help?: string;
+  hint?: string;
+  buttons: FormButton[];
 }
 
 export interface FieldGroup<M = any> {
