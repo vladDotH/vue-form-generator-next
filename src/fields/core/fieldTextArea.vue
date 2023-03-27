@@ -22,7 +22,8 @@ import {
   FieldProps,
   FieldEmits,
   FieldPropsObject,
-  FieldEmitsObject
+  FieldEmitsObject,
+  FieldExpose
 } from "../fields";
 
 const rawProps = defineProps(FieldPropsObject);
@@ -36,7 +37,7 @@ const { getFieldID, clearValidationErrors, validate, value } = useField(
   emits
 );
 
-defineExpose({ validate, clearValidationErrors });
+defineExpose<FieldExpose>({ validate, clearValidationErrors });
 </script>
 
 <style lang="scss"></style>
