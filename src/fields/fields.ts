@@ -83,3 +83,8 @@ export interface FieldEmits {
 }
 
 export const FieldEmitsObject = ["validated", "model-updated"];
+
+export interface FieldExpose {
+  validate: (calledParent?: any) => Promise<any[]> | any[];
+  clearValidationErrors: () => any[];
+}
