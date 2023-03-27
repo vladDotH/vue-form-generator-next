@@ -38,26 +38,26 @@ export interface FieldSchema<M = any, V = any> {
   inputName?: string;
   inputType?: string;
   fieldClasses?: string;
-  readonly?: boolean;
   accept?: string;
   get?: (model: M) => V;
   set?: (model: M, value: V) => void;
-  onChanged: (model: M, newVal: V, oldVal: V, field: FieldSchema<M, V>) => void;
   validator: string | string[];
+  onChanged: (model: M, newVal: V, oldVal: V, field: FieldSchema<M, V>) => void;
   onValidated: (model: M, errors: any[], field: FieldSchema<M, V>) => void;
   validateDebounceTime?: number;
   max?: number;
   min?: number;
   placeholder?: string;
-  required?: boolean;
   rows?: number;
   styleClasses?: string | string[];
   labelClasses?: string;
   help?: string;
   hint?: string;
   buttons?: FormButton[];
-  disabled?: boolean;
-  featured?: boolean;
+  required?: boolean | FieldSchemaCallBack<boolean>;
+  readonly?: boolean | FieldSchemaCallBack<boolean>;
+  disabled?: boolean | FieldSchemaCallBack<boolean>;
+  featured?: boolean | FieldSchemaCallBack<boolean>;
 }
 
 export interface FieldGroup<M = any> {
