@@ -1,46 +1,50 @@
 <template>
-  <div class="form-group" :class="getFieldRowClasses(field)">
+  <div class="form-group" :class="getFieldRowClasses(props.field)">
     <label
-      v-if="fieldTypeHasLabel(field)"
-      :for="getFieldID(field)"
-      :class="field.labelClasses"
+      v-if="fieldTypeHasLabel(props.field)"
+      :for="getFieldID(props.field)"
+      :class="props.field.labelClasses"
     >
-      <span v-html="field.label"></span>
-      <span v-if="field.help" class="help">
+      <span v-html="props.field.label"></span>
+      <span v-if="props.field.help" class="help">
         <i class="icon"></i>
-        <div class="helpText" v-html="field.help"></div>
+        <div class="helpText" v-html="props.field.help"></div>
       </span>
     </label>
 
     <div class="field-wrap">
       <component
-        :is="getFieldType(field)"
+        :is="getFieldType(props.field)"
         ref="child"
-        :vfg="vfg"
-        :disabled="fieldDisabled(field)"
-        :model="model"
-        :schema="field"
-        :form-options="options"
+        :vfg="props.vfg"
+        :disabled="fieldDisabled(props.field)"
+        :model="props.model"
+        :schema="props.field"
+        :form-options="props.options"
         @model-updated="onModelUpdated"
         @validated="onFieldValidated"
       ></component>
-      <div v-if="buttonVisibility(field)" class="buttons">
+      <div v-if="buttonVisibility(props.field)" class="buttons">
         <button
-          v-for="(btn, index) in field.buttons"
+          v-for="(btn, index) in props.field.buttons"
           :key="index"
           :class="btn.classes"
           :type="getButtonType(btn)"
-          @click="buttonClickHandler(btn, field, $event)"
+          @click="buttonClickHandler(btn, props.field, $event)"
           v-text="btn.label"
         ></button>
       </div>
     </div>
 
-    <div v-if="field.hint" class="hint" v-html="fieldHint(field)"></div>
+    <div
+      v-if="props.field.hint"
+      class="hint"
+      v-html="fieldHint(props.field)"
+    ></div>
 
-    <div v-if="fieldErrors(field).length > 0" class="errors help-block">
+    <div v-if="fieldErrors(props.field).length > 0" class="errors help-block">
       <span
-        v-for="(error, index) in fieldErrors(field)"
+        v-for="(error, index) in fieldErrors(props.field)"
         :key="index"
         v-html="error"
       ></span>
@@ -51,19 +55,43 @@
 <script setup lang="ts">
 import { get as objGet, isNil, isFunction } from "lodash";
 import { slugifyFormID } from "./utils/schema.js";
-import formMixin from "./formMixin.js";
-import fieldComponents from "./utils/fieldsLoader.js";
-import { FieldEmits, FieldEmitsObject } from "./fields/fields";
+import {
+  FieldEmits,
+  FieldEmitsObject,
+  FieldExpose,
+  FieldSchema,
+  FormButton
+} from "./fields/fields";
 import { WrapperProps, WrapperPropsObject } from "./form";
+import { useForm } from "./use-form";
+import { getCurrentInstance, ref, toRef } from "vue";
 
 const rawProps = defineProps(WrapperPropsObject);
 const props = rawProps as WrapperProps;
 
 const rawEmits = defineEmits(FieldEmitsObject);
-const emits = rawEmits as FieldEmits;
+const emit = rawEmits as FieldEmits;
+
+const child = ref<FieldExpose>();
+
+// TODO remove instances
+const instance = getCurrentInstance();
+
+const {
+  getFieldRowClasses,
+  fieldErrors,
+  fieldDisabled,
+  fieldReadonly,
+  fieldFeatured,
+  fieldRequired
+} = useForm(
+  toRef(props, "errors"),
+  toRef(props, "model"),
+  toRef(props, "options")
+);
 
 // Should field type have a label?
-function fieldTypeHasLabel(field) {
+function fieldTypeHasLabel(field: FieldSchema) {
   if (isNil(field.label)) return false;
 
   let relevantType = "";
@@ -83,8 +111,8 @@ function fieldTypeHasLabel(field) {
   }
 }
 
-function getFieldID(schema) {
-  const idPrefix = objGet(this.options, "fieldIdPrefix", "");
+function getFieldID(schema: FieldSchema) {
+  const idPrefix = props.options.fieldIdPrefix ?? "";
   return slugifyFormID(schema, idPrefix);
 }
 
@@ -95,47 +123,43 @@ function getFieldType(fieldSchema) {
 
 // Get type of button, default to 'button'
 function getButtonType(btn) {
-  return objGet(btn, "type", "button");
+  return btn.type ?? "button";
 }
 
 // Child field executed validation
-function onFieldValidated(res, errors, field) {
-  this.$emit("validated", res, errors, field);
+function onFieldValidated(res: any, errors: any[], field: FieldSchema) {
+  emit("validated", res, errors, field);
 }
 
-function buttonVisibility(field) {
+function buttonVisibility(field: FieldSchema) {
   return field.buttons && field.buttons.length > 0;
 }
 
-function buttonClickHandler(btn, field, event) {
-  return btn.onclick.call(this, this.model, field, event, this);
+function buttonClickHandler(btn: FormButton, field: FieldSchema, event: any) {
+  return btn.onclick.call(instance, props.model, field, event, instance);
 }
 
 // Get current hint.
-function fieldHint(field) {
+function fieldHint(field: FieldSchema) {
   if (isFunction(field.hint))
-    return field.hint.call(this, this.model, field, this);
+    return field.hint.call(instance, props.model, field, instance);
 
   return field.hint;
 }
 
-function fieldErrors(field) {
-  return this.errors.filter((e) => e.field === field).map((item) => item.error);
+function onModelUpdated(newVal: any, schema: FieldSchema) {
+  emit("model-updated", newVal, schema);
 }
 
-function onModelUpdated(newVal, schema) {
-  this.$emit("model-updated", newVal, schema);
-}
-
-function validate(calledParent) {
-  return this.$refs.child.validate(calledParent);
+function validate(calledParent: any) {
+  return child.value.validate?.(calledParent);
 }
 
 function clearValidationErrors() {
-  if (this.$refs.child) {
-    return this.$refs.child.clearValidationErrors();
-  }
+  return child.value?.clearValidationErrors();
 }
+
+defineExpose<FieldExpose>({ validate, clearValidationErrors });
 </script>
 
 <style lang="scss">
