@@ -12,7 +12,7 @@ import { FormOptions } from "./fields/fields";
 // TODO: drop context binding to disabled, readonly, featured, required
 export const useForm = (
   errors: Ref<any[]>,
-  model: Ref<any>,
+  model: Ref,
   options: Ref<FormOptions>
 ) => {
   const instance = getCurrentInstance();
@@ -42,8 +42,9 @@ export const useForm = (
   };
 
   const fieldErrors = (field) => {
-    const res = errors.value.filter((e) => e.field === field);
-    return res.map((item) => item.error);
+    return errors.value
+      .filter((e) => e.field === field)
+      .map((item) => item.error);
   };
 
   // Get disabled attr of field
@@ -84,5 +85,14 @@ export const useForm = (
     if (isNil(field.required)) return false;
 
     return field.required;
+  };
+
+  return {
+    getFieldRowClasses,
+    fieldErrors,
+    fieldDisabled,
+    fieldReadonly,
+    fieldFeatured,
+    fieldRequired
   };
 };
