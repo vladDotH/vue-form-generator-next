@@ -24,6 +24,12 @@ export interface FormButton {
   ) => void;
 }
 
+export type FieldSchemaCallBack<T, M = any> = (
+  model: M,
+  field: FieldSchema<M>,
+  wrapper: FormWrapper
+) => T;
+
 export interface FieldSchema<M = any, V = any> {
   type?: string;
   label?: string;
