@@ -45,10 +45,13 @@ export interface FieldSchema<M = any, V = any> {
   placeholder?: string;
   required?: boolean;
   rows?: number;
+  styleClasses?: string | string[];
   labelClasses?: string;
   help?: string;
   hint?: string;
-  buttons: FormButton[];
+  buttons?: FormButton[];
+  disabled?: boolean;
+  featured?: boolean;
 }
 
 export interface FieldGroup<M = any> {
