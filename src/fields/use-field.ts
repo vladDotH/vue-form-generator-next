@@ -74,9 +74,9 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
     return slugifyFormID(schema, idPrefix) + (unique ? "-" + uniqueId() : "");
   };
 
-  const clearValidationErrors = () => errors.value.splice(0);
+  const clearValidationErrors = () => errors.value.splice(0) as any[];
 
-  const validate = (calledParent?: boolean) => {
+  const validate = (calledParent?: any) => {
     clearValidationErrors();
     const validateAsync = props.formOptions.validateAsync ?? false;
     const validateDisabled = props.formOptions.validateDisabled ?? false;
