@@ -10,6 +10,18 @@ export interface FormOptions {
   validateDebounceTime: number;
 }
 
+export interface FormButton {
+  classes?: string;
+  label?: string;
+  type?: string;
+  onclick: (
+    model: any,
+    field: FieldSchema,
+    event: any,
+    wrapper: FormWrapper
+  ) => void;
+}
+
 export interface FieldSchema<M = any, V = any> {
   type?: string;
   label?: string;
