@@ -25,13 +25,15 @@
 <script setup lang="ts">
 import { Component, computed, nextTick, onMounted, ref } from "vue";
 import { prettyJSON } from "@/utils";
+import Test from "@/test.vue";
 
 const isNewModel = ref(false),
   selected = ref<any[]>([]),
   model = ref({
     first_name: "David",
     last_name: "Higgins",
-    status: true
+    status: true,
+    obj: {}
   }),
   schema = {
     fields: [
@@ -48,6 +50,12 @@ const isNewModel = ref(false),
             "data-target": "input"
           }
         }
+      },
+      {
+        type: "textArea",
+        inputType: "text",
+        label: "Description",
+        model: "obj.description"
       }
       // {
       // 	type: "checkbox",
