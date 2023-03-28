@@ -30,15 +30,14 @@ import Test from "@/test.vue";
 const isNewModel = ref(false),
   selected = ref<any[]>([]),
   model = ref({
-    first_name: "David",
-    last_name: "Higgins",
+    first_name: "Vladik",
     status: true,
     obj: {}
   }),
   schema = {
     fields: [
       {
-        type: "input",
+        type: "textArea",
         inputType: "text",
         label: "First Name",
         model: "first_name",
