@@ -2,7 +2,6 @@ import component from "./FormGenerator.vue";
 import * as schema from "./utils/schema";
 import validators from "./utils/validators";
 import fieldComponents from "./utils/fieldsLoader";
-import abstractField from "./fields/abstractField";
 import { FieldSchema } from "./fields/fields";
 
 export type ValidatorFunction<M = any, V = any> = (
