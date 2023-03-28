@@ -63,6 +63,7 @@ export interface FieldSchema<M = any, V = any> {
   multi?: boolean;
   visible?: boolean;
   pattern?: string;
+  attributes?: object;
 }
 
 export interface FieldGroup<M = any> {
