@@ -76,7 +76,7 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
 
   const clearValidationErrors = () => errors.value.splice(0) as any[];
 
-  const validate = (calledParent?: any) => {
+  const validate = (calledParent?: boolean) => {
     clearValidationErrors();
     const validateAsync = props.formOptions.validateAsync ?? false;
     const validateDisabled = props.formOptions.validateDisabled ?? false;
