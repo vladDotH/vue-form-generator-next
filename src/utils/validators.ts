@@ -6,9 +6,11 @@ import {
   isString,
   isArray,
   isFunction,
-  isFinite
+  isFinite,
+  isBoolean
 } from "lodash";
 import fecha from "fecha";
+import { FieldSchema, FieldSchemaCallBack } from "../fields/fields";
 
 const resources = {
   fieldIsRequired: "This field is required!",
@@ -43,9 +45,14 @@ const resources = {
   invalidTextContainSpec: "Invalid text! Cannot contains special characters"
 };
 
-function checkEmpty(value, required, messages = resources) {
+// TODO Reuqire callback
+function checkEmpty(
+  value: any,
+  required: boolean | FieldSchemaCallBack<boolean> | undefined,
+  messages: Record<string, string> = resources
+) {
   if (isNil(value) || value === "") {
-    if (required) {
+    if (isBoolean(required) && required) {
       return [msg(messages.fieldIsRequired)];
     } else {
       return [];
@@ -54,7 +61,7 @@ function checkEmpty(value, required, messages = resources) {
   return null;
 }
 
-function msg(text, ...args) {
+function msg(text: string, ...args: any[]) {
   if (text != null && args.length > 0) {
     for (let i = 0; i < args.length; i++) {
       text = text.replace("{" + (i - 1) + "}", args[i]);
@@ -64,14 +71,30 @@ function msg(text, ...args) {
   return text;
 }
 
-const validators = {
-  resources,
+export type VFGValidator = {
+  locale?: (
+    customMessages: Record<string, string>
+  ) => (
+    value: any,
+    field: FieldSchema,
+    model: any,
+    messages: Record<string, string>
+  ) => any;
 
-  required(value, field, model, messages = resources) {
+  (
+    value: any,
+    field: FieldSchema,
+    model: any,
+    messages: Record<string, string>
+  ): any;
+};
+
+const validators: Record<string, VFGValidator> = {
+  required(value: any, field: FieldSchema, model: any, messages = resources) {
     return checkEmpty(value, field.required, messages);
   },
 
-  number(value, field, model, messages = resources) {
+  number(value: any, field: FieldSchema, model: any, messages = resources) {
     const res = checkEmpty(value, field.required, messages);
     if (res != null) return res;
 
@@ -91,7 +114,7 @@ const validators = {
     return err;
   },
 
-  integer(value, field, model, messages = resources) {
+  integer(value: any, field: FieldSchema, model: any, messages = resources) {
     const res = checkEmpty(value, field.required, messages);
     if (res != null) return res;
     const errs = validators.number(value, field, model, messages);
@@ -103,7 +126,7 @@ const validators = {
     return errs;
   },
 
-  double(value, field, model, messages = resources) {
+  double(value: any, field: FieldSchema, model: any, messages = resources) {
     const res = checkEmpty(value, field.required, messages);
     if (res != null) return res;
 
@@ -112,7 +135,7 @@ const validators = {
     }
   },
 
-  string(value, field, model, messages = resources) {
+  string(value: any, field: FieldSchema, model: any, messages = resources) {
     const res = checkEmpty(value, field.required, messages);
     if (res != null) return res;
 
@@ -132,7 +155,7 @@ const validators = {
     return err;
   },
 
-  array(value, field, model, messages = resources) {
+  array(value: any, field: FieldSchema, model: any, messages = resources) {
     if (field.required) {
       if (!isArray(value)) {
         return [msg(messages.thisNotArray)];
@@ -154,7 +177,7 @@ const validators = {
     }
   },
 
-  date(value, field, model, messages = resources) {
+  date(value: any, field: FieldSchema, model: any, messages = resources) {
     const res = checkEmpty(value, field.required, messages);
     if (res != null) return res;
 
@@ -182,7 +205,7 @@ const validators = {
     return err;
   },
 
-  regexp(value, field, model, messages = resources) {
+  regexp(value: any, field: FieldSchema, model: any, messages = resources) {
     const res = checkEmpty(value, field.required, messages);
     if (res != null) return res;
 
@@ -194,7 +217,7 @@ const validators = {
     }
   },
 
-  email(value, field, model, messages = resources) {
+  email(value: any, field: FieldSchema, model: any, messages = resources) {
     const res = checkEmpty(value, field.required, messages);
     if (res != null) return res;
 
@@ -205,7 +228,7 @@ const validators = {
     }
   },
 
-  url(value, field, model, messages = resources) {
+  url(value: any, field: FieldSchema, model: any, messages = resources) {
     const res = checkEmpty(value, field.required, messages);
     if (res != null) return res;
 
@@ -216,7 +239,7 @@ const validators = {
     }
   },
 
-  creditCard(value, field, model, messages = resources) {
+  creditCard(value: any, field: FieldSchema, model: any, messages = resources) {
     const res = checkEmpty(value, field.required, messages);
     if (res != null) return res;
 
@@ -254,7 +277,7 @@ const validators = {
     }
   },
 
-  alpha(value, field, model, messages = resources) {
+  alpha(value: any, field: FieldSchema, model: any, messages = resources) {
     const res = checkEmpty(value, field.required, messages);
     if (res != null) return res;
 
@@ -264,7 +287,12 @@ const validators = {
     }
   },
 
-  alphaNumeric(value, field, model, messages = resources) {
+  alphaNumeric(
+    value: any,
+    field: FieldSchema,
+    model: any,
+    messages = resources
+  ) {
     const res = checkEmpty(value, field.required, messages);
     if (res != null) return res;
 
@@ -275,7 +303,7 @@ const validators = {
   }
 };
 
-Object.keys(validators).forEach((name) => {
+Object.keys(validators).forEach((name: string) => {
   const fn = validators[name];
   if (isFunction(fn)) {
     fn.locale = (customMessages) => (value, field, model) =>
