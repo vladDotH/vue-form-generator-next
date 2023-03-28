@@ -2,10 +2,10 @@
   <div v-if="schema != null" class="vue-form-generator">
     <fieldset :is="tag" v-if="schema.fields">
       <template v-for="field in fields">
-        <form-group
+        <FormWrapper
           v-if="fieldVisible(field)"
           :ref="addChildRef"
-          :vfg="vfg"
+          :vfg="instance"
           :field="field"
           :errors="errors"
           :model="model"
@@ -19,10 +19,10 @@
       <fieldset :is="tag" :class="getFieldRowClasses(group)">
         <legend v-if="group.legend">{{ group.legend }}</legend>
         <template v-for="field in group.fields">
-          <form-group
+          <FormWrapper
             v-if="fieldVisible(field)"
             :ref="addChildRef"
-            :vfg="vfg"
+            :vfg="instance"
             :field="field"
             :errors="errors"
             :model="model"
@@ -38,8 +38,6 @@
 
 <script setup lang="ts">
 import { get as objGet, forEach, isFunction, isNil, isArray } from "lodash";
-import formMixin from "./formMixin.js";
-import formGroup from "./formGroup.vue";
 import {
   FormProps,
   FormPropsObject,
@@ -63,6 +61,7 @@ import {
   watch
 } from "vue";
 import { useForm } from "./use-form";
+import FormWrapper from "./FormWrapper.vue";
 
 const rawProps = defineProps(FormPropsObject);
 const props = rawProps as FormProps;

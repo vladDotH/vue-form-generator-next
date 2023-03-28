@@ -1,4 +1,4 @@
-import component from "./formGenerator.vue";
+import component from "./FormGenerator.vue";
 import * as schema from "./utils/schema";
 import validators from "./utils/validators";
 import fieldComponents from "./utils/fieldsLoader";

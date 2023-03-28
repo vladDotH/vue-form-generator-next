@@ -134,7 +134,7 @@ function getButtonType(btn) {
 }
 
 // Child field executed validation
-function onFieldValidated(res: any, errors: any[], field: FieldSchema) {
+function onFieldValidated(res: any, errors: any[], field: any) {
   emit("validated", res, errors, field);
 }
 
