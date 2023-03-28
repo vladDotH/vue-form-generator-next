@@ -23,7 +23,7 @@
         :form-options="props.options"
         @model-updated="onModelUpdated"
         @validated="onFieldValidated"
-      ></component>
+      />
       <div v-if="buttonVisibility(props.field)" class="buttons">
         <button
           v-for="(btn, index) in props.field.buttons"
@@ -52,8 +52,15 @@
   </div>
 </template>
 
+<script lang="ts">
+import fieldComponents from "./utils/fieldsLoader.js";
+export default {
+  components: fieldComponents
+};
+</script>
+
 <script setup lang="ts">
-import { get as objGet, isNil, isFunction } from "lodash";
+import { isNil, isFunction } from "lodash";
 import { slugifyFormID } from "./utils/schema.js";
 import {
   FieldEmits,
