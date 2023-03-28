@@ -5,26 +5,29 @@ import {
   isObject,
   isArray,
   isFunction,
-  cloneDeep
+  cloneDeep,
+  isString
 } from "lodash";
+import { FieldSchema, FormSchema } from "../fields/fields";
 
 // Create a new model by schema default values
-const createDefaultObject = (schema, obj = {}) => {
-  each(schema.fields, (field) => {
-    if (get(obj, field.model) === undefined && field.default !== undefined) {
-      if (isFunction(field.default)) {
-        set(obj, field.model, field.default(field, schema, obj));
-      } else if (isObject(field.default) || isArray(field.default)) {
-        set(obj, field.model, cloneDeep(field.default));
-      } else set(obj, field.model, field.default);
-    }
+const createDefaultObject = (schema: FormSchema, obj: any = {}) => {
+  each(schema.fields, (field: FieldSchema) => {
+    if (isString(field.model))
+      if (get(obj, field.model) === undefined && field.default !== undefined) {
+        if (isFunction(field.default)) {
+          set(obj, field.model, field.default(field, schema, obj));
+        } else if (isObject(field.default) || isArray(field.default)) {
+          set(obj, field.model, cloneDeep(field.default));
+        } else set(obj, field.model, field.default);
+      }
   });
   return obj;
 };
 
 // Get a new model which contains only properties of multi-edit fields
-const getMultipleFields = (schema) => {
-  const res = [];
+const getMultipleFields = (schema: FormSchema) => {
+  const res: FieldSchema[] = [];
   each(schema.fields, (field) => {
     if (field.multi === true) res.push(field);
   });
@@ -33,33 +36,35 @@ const getMultipleFields = (schema) => {
 };
 
 // Merge many models to one 'work model' by schema
-const mergeMultiObjectFields = (schema, objs) => {
+const mergeMultiObjectFields = (schema: FormSchema, objs: any[]) => {
   const model = {};
 
   const fields = getMultipleFields(schema);
 
   each(fields, (field) => {
-    let mergedValue;
+    let mergedValue: any;
     let notSet = true;
     const path = field.model;
 
-    each(objs, (obj) => {
-      const v = get(obj, path);
-      if (notSet) {
-        mergedValue = v;
-        notSet = false;
-      } else if (mergedValue !== v) {
-        mergedValue = undefined;
-      }
-    });
+    if (isString(path)) {
+      each(objs, (obj) => {
+        const v = get(obj, path);
+        if (notSet) {
+          mergedValue = v;
+          notSet = false;
+        } else if (mergedValue !== v) {
+          mergedValue = undefined;
+        }
+      });
 
-    set(model, path, mergedValue);
+      set(model, path, mergedValue);
+    }
   });
 
   return model;
 };
 
-const slugifyFormID = (schema, prefix = "") => {
+const slugifyFormID = (schema: FieldSchema, prefix = "") => {
   // Try to get a reasonable default id from the schema,
   // then slugify it.
   if (typeof schema.id !== "undefined") {
