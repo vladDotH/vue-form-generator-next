@@ -17,7 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import { vAttributes, useField } from "../use-field";
+import { useField } from "../use-field";
+import { vAttributes } from "../v-attributes";
 import {
   FieldProps,
   FieldEmits,

@@ -125,7 +125,7 @@ function getFieldID(schema: FieldSchema) {
 
 // Get type of field 'field-xxx'. It'll be the name of HTML element
 function getFieldType(fieldSchema) {
-  return "field-" + fieldSchema.type;
+  return "Field-" + fieldSchema.type;
 }
 
 // Get type of button, default to 'button'
