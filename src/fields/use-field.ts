@@ -1,61 +1,17 @@
 import {
   debounce,
   forEach,
-  get as objGet,
+  get,
   isArray,
   isFunction,
   isString,
   uniqueId,
-  uniq as arrayUniq
+  uniq
 } from "lodash";
-import {
-  computed,
-  Directive,
-  DirectiveBinding,
-  getCurrentInstance,
-  ref
-} from "vue";
+import { computed, getCurrentInstance, ref } from "vue";
 import { FieldEmits, FieldProps, FieldSchema } from "./fields";
-import validators from "../utils/validators";
 import { slugifyFormID } from "../utils/schema";
-
-// TODO validators types
-function convertValidator(validator: string | CallableFunction) {
-  if (isString(validator)) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (validators[validator] != null) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      return validators[validator];
-    } else {
-      console.warn(`'${validator}' is not a validator function!`);
-      return null; // caller need to handle null
-    }
-  }
-  return validator;
-}
-
-// TODO Vnode context type
-function attributesDirective(
-  el: Element,
-  binding: DirectiveBinding,
-  vnode: any
-) {
-  let attrs = vnode.context?.schema?.attributes ?? {};
-  const container = binding.value || "input";
-  if (isString(container)) {
-    attrs = objGet(attrs, container) || attrs;
-  }
-  forEach(attrs, (val, key) => {
-    el.setAttribute(key, val);
-  });
-}
-
-export const vAttributes: Directive = {
-  mounted: attributesDirective,
-  updated: attributesDirective
-};
+import { convertValidator } from "./util";
 
 // TODO: drop context binding to onValidated, validators & inside emit('validated')
 export const useField = (props: FieldProps, emit: FieldEmits) => {
@@ -121,7 +77,7 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
 
     const handleErrors = (errorsHandled: any[]) => {
       let fieldErrors: any[] = [];
-      forEach(arrayUniq(errorsHandled), (err) => {
+      forEach(uniq(errorsHandled), (err) => {
         if (isArray(err) && err.length > 0) {
           fieldErrors = fieldErrors.concat(err);
         } else if (isString(err)) {
@@ -210,12 +166,12 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
         props.schema.onChanged(props.model, newValue, oldValue, props.schema);
       }
 
-      if (objGet(props.formOptions, "validateAfterChanged", false) === true) {
+      if (get(props.formOptions, "validateAfterChanged", false) === true) {
         if (
-          objGet(
+          get(
             props.schema,
             "validateDebounceTime",
-            objGet(props.formOptions, "validateDebounceTime", 0)
+            get(props.formOptions, "validateDebounceTime", 0)
           ) > 0
         ) {
           debouncedValidate();
@@ -232,7 +188,7 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
       if (isFunction(props.schema.get)) {
         val = props.schema.get(props.model);
       } else if (props.schema.model) {
-        val = objGet(props.model, props.schema.model);
+        val = get(props.model, props.schema.model);
       }
 
       return formatValueToField(val);
