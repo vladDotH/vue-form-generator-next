@@ -18,9 +18,9 @@ export interface VFGPluginOptions {
   };
 }
 
-const install = (Vue: any, options: VFGPluginOptions) => {
+const install = (Vue: any, options?: VFGPluginOptions) => {
   Vue.component("VueFormGenerator", component);
-  if (options && options.validators) {
+  if (options?.validators) {
     for (const key in options.validators) {
       // if ({}.hasOwnProperty.call(options.validators, key)) {
       validators[key] = options.validators[key];
