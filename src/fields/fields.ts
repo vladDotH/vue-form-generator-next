@@ -58,6 +58,8 @@ export interface FieldSchema<M = any, V = any> {
   readonly?: boolean | FieldSchemaCallBack<boolean>;
   disabled?: boolean | FieldSchemaCallBack<boolean>;
   featured?: boolean | FieldSchemaCallBack<boolean>;
+  multi?: boolean;
+  visible?: boolean;
 }
 
 export interface FieldGroup<M = any> {
