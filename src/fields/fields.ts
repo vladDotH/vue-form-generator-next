@@ -60,6 +60,7 @@ export interface FieldSchema<M = any, V = any> {
   featured?: boolean | FieldSchemaCallBack<boolean>;
   multi?: boolean;
   visible?: boolean;
+  pattern?: string;
 }
 
 export interface FieldGroup<M = any> {
