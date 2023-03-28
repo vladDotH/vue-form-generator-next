@@ -3,7 +3,7 @@ import { FieldSchema, FormOptions, FormSchema } from "./fields/fields";
 export interface FormProps {
   schema: FormSchema;
   model: any;
-  option: FormOptions;
+  options: FormOptions;
   multiple: boolean;
   isNewModel: boolean;
   tag: string;
