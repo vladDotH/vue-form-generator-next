@@ -32,7 +32,6 @@ export default {
   component,
   schema,
   validators,
-  abstractField,
   fieldComponents,
   install
 };
