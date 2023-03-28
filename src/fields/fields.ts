@@ -1,4 +1,5 @@
 import FormWrapper from "../FormWrapper.vue";
+import { PropType } from "vue";
 
 export interface FormOptions {
   validateAfterLoad: boolean;
@@ -34,6 +35,7 @@ export interface FieldSchema<M = any, V = any> {
   type?: string;
   label?: string;
   model?: string;
+  default?: any;
   id?: string;
   inputName?: string;
   inputType?: string;
@@ -84,8 +86,8 @@ export interface FieldProps {
 export const FieldPropsObject = {
   vfg: Object,
   model: Object,
-  schema: Object,
-  formOptions: Object,
+  schema: Object as PropType<FieldSchema>,
+  formOptions: Object as PropType<FormOptions>,
   disabled: Boolean
 };
 

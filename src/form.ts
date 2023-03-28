@@ -1,4 +1,5 @@
 import { FieldSchema, FormOptions, FormSchema } from "./fields/fields";
+import { PropType } from "vue";
 
 export interface FormProps {
   schema: FormSchema;
@@ -10,10 +11,10 @@ export interface FormProps {
 }
 
 export const FormPropsObject = {
-  schema: Object,
+  schema: Object as PropType<FormSchema>,
   model: Object,
   options: {
-    type: Object,
+    type: Object as PropType<FormOptions>,
     default() {
       return {
         validateAfterLoad: false,
