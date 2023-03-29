@@ -1,5 +1,5 @@
 import FormWrapper from "../FormWrapper.vue";
-import { PropType } from "vue";
+import { ComponentPublicInstance, PropType } from "vue";
 
 export interface FormOptions {
   validateAfterLoad: boolean;
@@ -21,14 +21,14 @@ export interface FormButton {
     model: any,
     field: FieldSchema,
     event: any,
-    wrapper: FormWrapper
+    wrapper: typeof FormWrapper
   ) => void;
 }
 
 export type FieldSchemaCallBack<T, M = any> = (
   model: M,
   field: FieldSchema<M>,
-  wrapper: FormWrapper
+  wrapper: typeof FormWrapper
 ) => T;
 
 export interface FieldSchema<M = any, V = any> {
@@ -85,19 +85,35 @@ export interface FieldProps {
 }
 
 export const FieldPropsObject = {
-  vfg: Object,
-  model: Object,
+  vfg: Object as PropType<any>,
+  model: Object as PropType<any>,
   schema: Object as PropType<FieldSchema>,
   formOptions: Object as PropType<FormOptions>,
-  disabled: Boolean
+  disabled: Boolean as PropType<boolean>
 };
 
 export interface FieldEmits {
-  (e: "validated", isValid: boolean, errors: any[], vfg: any): void;
-  (e: "model-updated", value: any, model: any): void;
+  (
+    e: "validated",
+    isValid: boolean,
+    errors: any[],
+    vfg: ComponentPublicInstance
+  ): void;
+  (e: "model-updated", value: any, model: string): void;
 }
 
-export const FieldEmitsObject = ["validated", "model-updated"];
+export const FieldEmitsObject = {
+  validated(
+    isValid: boolean,
+    errors: any[],
+    instance: ComponentPublicInstance
+  ) {
+    return true;
+  },
+  "model-updated": function (newValue: any, model: string) {
+    return true;
+  }
+};
 
 export interface FieldExpose {
   validate: (calledParent?: any) => Promise<any[]> | any[];
