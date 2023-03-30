@@ -1,6 +1,6 @@
 <template>
   <div v-if="schema != null" class="vue-form-generator">
-    <fieldset :is="tag" v-if="schema.fields">
+    <component :is="props.tag" v-if="props.schema.fields">
       <template v-for="field in fields">
         <FormWrapper
           v-if="fieldVisible(field)"
@@ -8,15 +8,15 @@
           :vfg="instance"
           :field="field"
           :errors="errors"
-          :model="model"
-          :options="options"
+          :model="props.model"
+          :options="props.options"
           @validated="onFieldValidated"
           @model-updated="onModelUpdated"
         />
       </template>
-    </fieldset>
+    </component>
     <template v-for="group in groups">
-      <fieldset :is="tag" :class="getFieldRowClasses(group)">
+      <component :is="props.tag" :class="getFieldRowClasses(group)">
         <legend v-if="group.legend">{{ group.legend }}</legend>
         <template v-for="field in group.fields">
           <FormWrapper
@@ -31,7 +31,7 @@
             @model-updated="onModelUpdated"
           />
         </template>
-      </fieldset>
+      </component>
     </template>
   </div>
 </template>
