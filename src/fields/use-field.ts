@@ -8,25 +8,30 @@ import {
   uniqueId,
   uniq
 } from "lodash";
-import { computed, getCurrentInstance, ref } from "vue";
+import {
+  ComponentInternalInstance,
+  computed,
+  getCurrentInstance,
+  ref
+} from "vue";
 import { FieldEmits, FieldProps, FieldSchema } from "./fields";
 import { slugifyFormID } from "../utils/schema";
 import { convertValidator } from "./util";
 
 // TODO: drop context binding to onValidated, validators & inside emit('validated')
 export const useField = (props: FieldProps, emit: FieldEmits) => {
-  const instance = getCurrentInstance();
+  const instance = getCurrentInstance() as ComponentInternalInstance;
 
   const errors = ref<any[]>([]),
     debouncedValidateFunc = ref<any>(null),
     debouncedFormatFunc = ref<any>(null);
 
   const getFieldClasses = () => props.schema.fieldClasses ?? [],
-    formatValueToField = (value: any) => value,
-    formatValueToModel = (value: any) => value;
+    formatValueToField = ref((value: any) => value),
+    formatValueToModel = ref((value: any) => value);
 
   const getFieldID = (schema: FieldSchema, unique = false) => {
-    const idPrefix = props.formOptions.fieldIdPrefix ?? "";
+    const idPrefix = props.formOptions?.fieldIdPrefix ?? "";
     return slugifyFormID(schema, idPrefix) + (unique ? "-" + uniqueId() : "");
   };
 
@@ -34,9 +39,9 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
 
   const validate = (calledParent?: boolean) => {
     clearValidationErrors();
-    const validateAsync = props.formOptions.validateAsync ?? false;
-    const validateDisabled = props.formOptions.validateDisabled ?? false;
-    const validateReadonly = props.formOptions.validateReadonly ?? false;
+    const validateAsync = props.formOptions?.validateAsync ?? false;
+    const validateDisabled = props.formOptions?.validateDisabled ?? false;
+    const validateReadonly = props.formOptions?.validateReadonly ?? false;
     let results: any[] = [];
 
     if (
@@ -46,12 +51,12 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
     ) {
       const validators = [];
       if (!isArray(props.schema.validator)) {
-        validators.push(
-          convertValidator(props.schema.validator).bind(instance)
-        );
+        const converted = convertValidator(props.schema.validator);
+        if (converted) validators.push(converted.bind(instance));
       } else {
         forEach(props.schema.validator, (validator) => {
-          validators.push(convertValidator(validator).bind(instance));
+          const converted = convertValidator(validator);
+          if (converted) validators.push(converted.bind(instance));
         });
       }
 
@@ -113,7 +118,7 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
       debouncedValidateFunc.value = debounce(
         validate,
         props.schema.validateDebounceTime ??
-          props.formOptions.validateDebounceTime ??
+          props.formOptions?.validateDebounceTime ??
           500
       );
     }
@@ -191,11 +196,11 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
         val = get(props.model, props.schema.model);
       }
 
-      return formatValueToField(val);
+      return formatValueToField.value(val);
     },
     set: (newValue) => {
       const oldValue = value.value;
-      newValue = formatValueToModel(newValue);
+      newValue = formatValueToModel.value(newValue);
 
       if (isFunction(newValue)) {
         newValue(newValue, oldValue);
