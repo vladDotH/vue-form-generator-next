@@ -146,7 +146,7 @@ formatValueToModel.value = (value) => {
       case "range":
         // debounce
         return (newValue, oldValue) => {
-          debouncedFormatFunc(value, oldValue);
+          debouncedFormatFunc.value(value, oldValue);
         };
     }
   }
@@ -215,7 +215,7 @@ const onInput = ($event) => {
 
 const onBlur = () => {
   if (isFunction(debouncedFormatFunc)) {
-    debouncedFormatFunc.flush();
+    debouncedFormatFunc.value.flush();
   }
 };
 </script>
