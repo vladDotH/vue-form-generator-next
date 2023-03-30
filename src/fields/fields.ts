@@ -1,7 +1,8 @@
 import FormWrapper from "../FormWrapper.vue";
 import {
+  Component,
   ComponentInternalInstance,
-  ComponentPublicInstance,
+  ExtractPropTypes,
   PropType
 } from "vue";
 
@@ -27,6 +28,7 @@ export interface FormButton {
     event: any,
     wrapper: typeof FormWrapper
   ) => void;
+  [key: string]: any;
 }
 
 export type FieldSchemaCallBack<T, M = any> = (
@@ -36,7 +38,7 @@ export type FieldSchemaCallBack<T, M = any> = (
 ) => T;
 
 export interface FieldSchema<M = any, V = any> {
-  type?: string;
+  type?: string | Component;
   label?: string;
   model?: string;
   default?: any;
@@ -68,43 +70,31 @@ export interface FieldSchema<M = any, V = any> {
   visible?: boolean;
   pattern?: string;
   attributes?: object;
+  format?: string;
+  [key: string]: any;
 }
 
 export interface FieldGroup<M = any> {
   legend: string;
   fields: FieldSchema<M>[];
+  [key: string]: any;
 }
 
 export interface FormSchema<M = any> {
   fields: FieldSchema<M>[];
   groups: FieldGroup<M>[];
-}
-
-export interface FieldProps {
-  vfg: any;
-  model: any;
-  schema: FieldSchema;
-  formOptions: FormOptions;
-  disabled: boolean;
+  [key: string]: any;
 }
 
 export const FieldPropsObject = {
-  vfg: Object as PropType<any>,
+  vfg: { type: Object as PropType<any> },
   model: Object as PropType<any>,
-  schema: Object as PropType<FieldSchema>,
+  schema: { type: Object as PropType<FieldSchema>, required: true },
   formOptions: Object as PropType<FormOptions>,
   disabled: Boolean as PropType<boolean>
-};
+} as const;
 
-export interface FieldEmits {
-  (
-    e: "validated",
-    isValid: boolean,
-    errors: any[],
-    instance: ComponentInternalInstance
-  ): void;
-  (e: "model-updated", value: any, model: string): void;
-}
+export type FieldProps = ExtractPropTypes<typeof FieldPropsObject>;
 
 export const FieldEmitsObject = {
   validated(
@@ -117,6 +107,16 @@ export const FieldEmitsObject = {
   "model-updated": function (newValue: any, model: string) {
     return true;
   }
+} as const;
+
+export type FieldEmits = {
+  (
+    event: "validated",
+    isValid: boolean,
+    errors: any[],
+    instance: ComponentInternalInstance
+  ): void;
+  (event: "model-updated", value: any, model: string): void;
 };
 
 export interface FieldExpose {
