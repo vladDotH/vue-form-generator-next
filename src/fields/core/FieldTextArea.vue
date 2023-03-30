@@ -19,23 +19,14 @@
 <script setup lang="ts">
 import { useField } from "../use-field";
 import { vAttributes } from "../v-attributes";
-import {
-  FieldProps,
-  FieldEmits,
-  FieldPropsObject,
-  FieldEmitsObject,
-  FieldExpose
-} from "../fields";
+import { FieldPropsObject, FieldEmitsObject, FieldExpose } from "../fields";
 
-const rawProps = defineProps(FieldPropsObject);
-const props = rawProps as FieldProps;
-
-const rawEmits = defineEmits(FieldEmitsObject);
-const emits = rawEmits as FieldEmits;
+const props = defineProps(FieldPropsObject);
+const emit = defineEmits(FieldEmitsObject);
 
 const { getFieldID, clearValidationErrors, validate, value } = useField(
   props,
-  emits
+  emit
 );
 
 defineExpose<FieldExpose>({ validate, clearValidationErrors });
