@@ -1,5 +1,9 @@
 import FormWrapper from "../FormWrapper.vue";
-import { ComponentPublicInstance, PropType } from "vue";
+import {
+  ComponentInternalInstance,
+  ComponentPublicInstance,
+  PropType
+} from "vue";
 
 export interface FormOptions {
   validateAfterLoad: boolean;
@@ -97,7 +101,7 @@ export interface FieldEmits {
     e: "validated",
     isValid: boolean,
     errors: any[],
-    vfg: ComponentPublicInstance
+    instance: ComponentInternalInstance
   ): void;
   (e: "model-updated", value: any, model: string): void;
 }
@@ -106,7 +110,7 @@ export const FieldEmitsObject = {
   validated(
     isValid: boolean,
     errors: any[],
-    instance: ComponentPublicInstance
+    instance: ComponentInternalInstance
   ) {
     return true;
   },
