@@ -3,7 +3,7 @@
     <h1>Basic</h1>
     <div class="row">
       <div class="col-sm-12">
-        <vue-form-generator
+        <VueFormGenerator
           ref="form"
           :schema="schema"
           :model="model"
@@ -23,21 +23,20 @@
 </template>
 
 <script setup lang="ts">
-import { Component, computed, nextTick, onMounted, ref } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { prettyJSON } from "@/utils";
-import Test from "@/test.vue";
 
 const isNewModel = ref(false),
   selected = ref<any[]>([]),
-  model = ref({
-    first_name: "Vladik",
-    status: true,
-    obj: {}
+  model = ref<any>({
+    first_name: "David",
+    last_name: "Higgins",
+    status: true
   }),
-  schema = {
+  schema = ref({
     fields: [
       {
-        type: "textArea",
+        type: "input",
         inputType: "text",
         label: "First Name",
         model: "first_name",
@@ -51,51 +50,46 @@ const isNewModel = ref(false),
         }
       },
       {
-        type: "textArea",
-        inputType: "text",
-        label: "Description",
-        model: "obj.description"
+        type: "checkbox",
+        label: "Active",
+        model: "status",
+        attributes: {
+          input: {
+            "data-toggle": "tooltip"
+          }
+        }
+      },
+      {
+        type: "input",
+        inputType: "color",
+        label: "Color",
+        model: "color",
+        attributes: {
+          input: {
+            "data-target": "tooltip"
+          }
+        }
+      },
+      {
+        type: "submit",
+        buttonText: "Change Previous Type",
+        attributes: {
+          input: {
+            "data-target": "toggle"
+          }
+        },
+        onSubmit: () => {
+          // this.schema.fields[2].type = "input";
+          if (schema.value.fields[2].inputType === "color") {
+            schema.value.fields[2].inputType = "text";
+          } else {
+            schema.value.fields[2].inputType = "color";
+            model.value.color = "#000000";
+          }
+        }
       }
-      // {
-      // 	type: "checkbox",
-      // 	label: "Active",
-      // 	model: "status",
-      // 	attributes: {
-      // 		input: {
-      // 			"data-toggle": "tooltip"
-      // 		}
-      // 	}
-      // },
-      // {
-      // 	type: "input",
-      // 	inputType: "color",
-      // 	label: "Color",
-      // 	model: "color",
-      // 	attributes: {
-      // 		input: {
-      // 			"data-target": "tooltip"
-      // 		}
-      // 	}
-      // },
-      // {
-      // 	type: "submit",
-      // 	buttonText: "Change Previous Type",
-      // 	attributes: {
-      // 		input: {
-      // 			"data-target": "toggle"
-      // 		}
-      // 	},
-      // 	onSubmit: () => {
-      // 		// this.schema.fields[2].type = "input";
-      // 		if (this.schema.fields[2].inputType === "color") {
-      // 			this.schema.fields[2].inputType = "text";
-      // 		} else {
-      // 			this.schema.fields[2].inputType = "color";
-      // 		}
-      // 	}
-      // }
     ]
-  },
+  }),
   formOptions = {
     validateAfterLoad: true,
     validateAfterChanged: true,
@@ -127,5 +121,5 @@ function modelUpdated(newVal: any, schema: any) {
 </script>
 
 <style lang="scss">
-@import "./style.scss";
+@import "../style.scss";
 </style>
