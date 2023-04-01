@@ -71,6 +71,15 @@ export interface FieldSchema<M = any, V = any> {
   pattern?: string;
   attributes?: object;
   format?: string;
+  autocomplete?: string;
+  validateBeforeSubmit?: boolean;
+  onValidationError: (
+    model: M,
+    schema: FieldSchema<M, V>,
+    errors: any[],
+    event: Event
+  ) => void;
+  onSubmit: (model: M, schema: FieldSchema<M, V>, event: Event) => void;
   [key: string]: any;
 }
 
