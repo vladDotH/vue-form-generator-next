@@ -18,7 +18,6 @@
 
 <script setup lang="ts">
 import { useField } from "../use-field";
-import { vAttributes } from "../v-attributes";
 import { FieldPropsObject, FieldEmitsObject, FieldExpose } from "../fields";
 
 const props = defineProps(FieldPropsObject);

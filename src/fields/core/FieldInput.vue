@@ -63,7 +63,6 @@ const DATETIME_FORMATS = {
 };
 
 import { useField } from "../use-field";
-import { vAttributes } from "../v-attributes";
 import { FieldPropsObject, FieldEmitsObject, FieldExpose } from "../fields";
 import { computed, onMounted } from "vue";
 
@@ -77,17 +76,12 @@ if (props.schema.inputType.toLowerCase() === "file") {
 }
 
 const {
-  errors,
-  debouncedValidateFunc,
   debouncedFormatFunc,
-  getFieldClasses,
   formatValueToField,
   formatValueToModel,
   getFieldID,
   clearValidationErrors,
   validate,
-  debouncedValidate,
-  setModelValueByPath,
   updateModelValue,
   value
 } = useField(props, emit);
