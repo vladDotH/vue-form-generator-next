@@ -4,7 +4,6 @@
     <div class="row">
       <div class="col-sm-12">
         <VueFormGenerator
-          ref="form"
           :schema="schema"
           :model="model"
           :options="formOptions"
@@ -23,93 +22,81 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { prettyJSON } from "@/utils";
 
-const isNewModel = ref(false),
-  selected = ref<any[]>([]),
-  model = ref<any>({
-    first_name: "David",
-    last_name: "Higgins",
-    status: true
-  }),
-  schema = ref({
-    fields: [
-      {
-        type: "input",
-        inputType: "text",
-        label: "First Name",
-        model: "first_name",
-        attributes: {
-          input: {
-            "data-toggle": "tooltip"
-          },
-          wrapper: {
-            "data-target": "input"
-          }
-        }
-      },
-      {
-        type: "checkbox",
-        label: "Active",
-        model: "status",
-        attributes: {
-          input: {
-            "data-toggle": "tooltip"
-          }
-        }
-      },
-      {
-        type: "input",
-        inputType: "color",
-        label: "Color",
-        model: "color",
-        attributes: {
-          input: {
-            "data-target": "tooltip"
-          }
-        }
-      },
-      {
-        type: "submit",
-        buttonText: "Change Previous Type",
-        attributes: {
-          input: {
-            "data-target": "toggle"
-          }
-        },
-        onSubmit: () => {
-          // this.schema.fields[2].type = "input";
-          if (schema.value.fields[2].inputType === "color") {
-            schema.value.fields[2].inputType = "text";
-          } else {
-            schema.value.fields[2].inputType = "color";
-            model.value.color = "#000000";
-          }
-        }
-      }
-    ]
-  }),
-  formOptions = {
-    validateAfterLoad: true,
-    validateAfterChanged: true,
-    validateBeforeSave: true
-  },
-  form = ref<any>();
+const isNewModel = ref(false);
 
-const prettyModel = computed(() => prettyJSON(model.value));
-
-onMounted(() => {
-  nextTick(function () {
-    // window.app = this;
-  });
+const model = ref<any>({
+  first_name: "David",
+  last_name: "Higgins",
+  status: true
 });
 
-function showWarning() {
-  if (form.value && form.value.errors) {
-    return form.value.errors.length > 0;
-  }
-}
+const schema = ref({
+  fields: [
+    {
+      type: "input",
+      inputType: "text",
+      label: "First Name",
+      model: "first_name",
+      attributes: {
+        input: {
+          "data-toggle": "tooltip"
+        },
+        wrapper: {
+          "data-target": "input"
+        }
+      }
+    },
+    {
+      type: "checkbox",
+      label: "Active",
+      model: "status",
+      attributes: {
+        input: {
+          "data-toggle": "tooltip"
+        }
+      }
+    },
+    {
+      type: "input",
+      inputType: "color",
+      label: "Color",
+      model: "color",
+      attributes: {
+        input: {
+          "data-target": "tooltip"
+        }
+      }
+    },
+    {
+      type: "submit",
+      buttonText: "Change Previous Type",
+      attributes: {
+        input: {
+          "data-target": "toggle"
+        }
+      },
+      onSubmit: () => {
+        if (schema.value.fields[2].inputType === "color") {
+          schema.value.fields[2].inputType = "text";
+        } else {
+          schema.value.fields[2].inputType = "color";
+          model.value.color = "#000000";
+        }
+      }
+    }
+  ]
+});
+
+const formOptions = {
+  validateAfterLoad: true,
+  validateAfterChanged: true,
+  validateBeforeSave: true
+};
+
+const prettyModel = computed(() => prettyJSON(model.value));
 
 function onValidated(res: any, errors: any) {
   console.log("VFG validated:", res, errors);
