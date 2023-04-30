@@ -12,7 +12,10 @@
 </template>
 
 <script setup lang="ts">
-const routes = [["basic", "Basic"]];
+const routes = [
+  ["basic", "Basic"],
+  ["checklist", "Checklist"]
+];
 </script>
 
 <style lang="scss">
