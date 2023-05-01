@@ -14,7 +14,8 @@
 <script setup lang="ts">
 const routes = [
   ["basic", "Basic"],
-  ["checklist", "Checklist"]
+  ["checklist", "Checklist"],
+  ["core", "Core"]
 ];
 </script>
 
