@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>Basic</h1>
+    <h1>CheckList</h1>
     <div class="row">
       <div class="col-sm-12">
         <VueFormGenerator
