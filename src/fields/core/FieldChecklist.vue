@@ -65,21 +65,15 @@ import { isObject, isNil, clone } from "lodash";
 import { slugify } from "../../utils/schema";
 import { useField } from "../use-field";
 import { FieldPropsObject, FieldEmitsObject, FieldExpose } from "../fields";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps(FieldPropsObject);
 const emit = defineEmits(FieldEmitsObject);
 
-const {
-  debouncedFormatFunc,
-  formatValueToField,
-  formatValueToModel,
-  getFieldID,
-  clearValidationErrors,
-  validate,
-  updateModelValue,
-  value
-} = useField(props, emit);
+const { getFieldID, clearValidationErrors, validate, value } = useField(
+  props,
+  emit
+);
 
 defineExpose<FieldExpose>({ validate, clearValidationErrors });
 
