@@ -38,6 +38,7 @@ export type FieldSchemaCallBack<T, M = any> = (
 ) => T;
 
 export interface FieldSchema<M = any, V = any> {
+  // Core fields
   type?: string | Component;
   label?: string;
   model?: string;
@@ -53,21 +54,22 @@ export interface FieldSchema<M = any, V = any> {
   onChanged: (model: M, newVal: V, oldVal: V, field: FieldSchema<M, V>) => void;
   onValidated: (model: M, errors: any[], field: FieldSchema<M, V>) => void;
   validateDebounceTime?: number;
-  max?: number;
-  min?: number;
-  placeholder?: string;
-  rows?: number;
-  styleClasses?: string | string[];
-  labelClasses?: string;
-  help?: string;
-  hint?: string;
-  buttons?: FormButton[];
   required?: boolean | FieldSchemaCallBack<boolean>;
   readonly?: boolean | FieldSchemaCallBack<boolean>;
   disabled?: boolean | FieldSchemaCallBack<boolean>;
   featured?: boolean | FieldSchemaCallBack<boolean>;
-  multi?: boolean;
   visible?: boolean;
+  multi?: boolean;
+  placeholder?: string;
+  styleClasses?: string | string[];
+  labelClasses?: string;
+  help?: string;
+  hint?: string;
+  // Additional
+  max?: number;
+  min?: number;
+  rows?: number;
+  buttons?: FormButton[];
   pattern?: string;
   attributes?: object;
   format?: string;
