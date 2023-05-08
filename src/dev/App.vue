@@ -20,7 +20,7 @@ const routes = [
 </script>
 
 <style lang="scss">
-@import "./style.scss";
+@import "@/dev/style";
 
 .nav {
   display: flex;

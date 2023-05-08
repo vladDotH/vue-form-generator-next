@@ -1,7 +1,7 @@
-import VueFormGenerator from "../../src";
+import VueFormGenerator from "../index";
 import App from "./App.vue";
 import { createApp } from "vue";
-import { router } from "@/router";
+import { router } from "@/dev/router";
 
 const app = createApp(App);
 

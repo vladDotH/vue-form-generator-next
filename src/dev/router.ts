@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import BasicComponents from "@/examples/BasicComponents.vue";
-import CheckList from "@/examples/CheckList.vue";
-import CoreComponents from "@/examples/CoreComponents.vue";
+import BasicComponents from "@/dev/examples/BasicComponents.vue";
+import CheckList from "@/dev/examples/CheckList.vue";
+import CoreComponents from "@/dev/examples/CoreComponents.vue";
 
 export const router = createRouter({
   history: createWebHashHistory(),

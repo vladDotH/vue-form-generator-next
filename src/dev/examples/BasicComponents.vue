@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { prettyJSON } from "@/utils";
+import { prettyJSON } from "@/dev/utils";
 
 const isNewModel = ref(false);
 
@@ -108,5 +108,5 @@ function modelUpdated(newVal: any, schema: any) {
 </script>
 
 <style lang="scss">
-@import "../style.scss";
+@import "@/dev/style";
 </style>
