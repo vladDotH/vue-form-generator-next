@@ -37,11 +37,33 @@ export type FieldSchemaCallBack<T, M = any> = (
   wrapper: typeof FormWrapper
 ) => T;
 
-export interface FieldSchema<M = any, V = any> {
+type Values<Type> = Type[keyof Type];
+
+type InnerKeys<Prefix extends string, Type> =
+  | Values<{
+      [Key in Exclude<keyof Type, symbol>]: `${Prefix}.${Key}`;
+    }>
+  | Values<{
+      [Key in Exclude<keyof Type, symbol>]: Type[Key] extends object
+        ? InnerKeys<`${Prefix}.${Key}`, Type[Key]>
+        : never;
+    }>;
+
+type ModelKeys<Type> =
+  | keyof Type
+  | Values<{
+      [Key in Exclude<keyof Type, symbol>]: Type[Key] extends object
+        ? Key extends string
+          ? InnerKeys<Key, Type[Key]>
+          : never
+        : never;
+    }>;
+
+export interface FieldSchema<M = object, V = any> {
   // Core fields
   type?: string | Component;
   label?: string;
-  model?: string;
+  model?: ModelKeys<M> | string;
   default?: any;
   id?: string;
   inputName?: string;
