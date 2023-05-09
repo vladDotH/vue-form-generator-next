@@ -68,13 +68,17 @@ export interface FieldSchema<M = object, V = any> {
   id?: string;
   inputName?: string;
   inputType?: string;
-  fieldClasses?: string;
   accept?: string;
   get?: (model: M) => V;
   set?: (model: M, value: V) => void;
-  validator: string | string[];
-  onChanged: (model: M, newVal: V, oldVal: V, field: FieldSchema<M, V>) => void;
-  onValidated: (model: M, errors: any[], field: FieldSchema<M, V>) => void;
+  validator?: string | string[];
+  onChanged?: (
+    model: M,
+    newVal: V,
+    oldVal: V,
+    field: FieldSchema<M, V>
+  ) => void;
+  onValidated?: (model: M, errors: any[], field: FieldSchema<M, V>) => void;
   validateDebounceTime?: number;
   required?: boolean | FieldSchemaCallBack<boolean>;
   readonly?: boolean | FieldSchemaCallBack<boolean>;
@@ -83,17 +87,18 @@ export interface FieldSchema<M = object, V = any> {
   visible?: boolean;
   multi?: boolean;
   placeholder?: string;
+  fieldClasses?: string;
   styleClasses?: string | string[];
   labelClasses?: string;
   help?: string;
   hint?: string;
+  buttons?: FormButton[];
+  attributes?: object;
   // Additional
   max?: number;
   min?: number;
   rows?: number;
-  buttons?: FormButton[];
   pattern?: string;
-  attributes?: object;
   format?: string;
   autocomplete?: string;
   validateBeforeSubmit?: boolean;
