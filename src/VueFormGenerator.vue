@@ -1,5 +1,5 @@
 <template>
-  <div v-if="schema != null" class="vue-form-generator">
+  <div v-if="props.schema != null" class="vue-form-generator">
     <component :is="props.tag" v-if="props.schema.fields">
       <template v-for="field in fields">
         <FormWrapper
@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { get as objGet, forEach, isFunction, isNil, isArray } from "lodash";
+import _, { get as objGet, forEach, isFunction, isNil, isArray } from "lodash";
 import {
   FormExpose,
   FormProps,
@@ -59,6 +59,7 @@ import {
   onMounted,
   ref,
   toRef,
+  unref,
   watch
 } from "vue";
 import { useForm } from "./use-form";
@@ -142,15 +143,15 @@ const fieldVisible = (field: FieldSchema) => {
 };
 
 // Child field executed validation
-const onFieldValidated = (res: any, fieldErrors: any, field: any) => {
+const onFieldValidated = (res: any, fieldErrors: any, schema: any) => {
   // Remove old errors for this field
-  errors.value = errors.value.filter((e) => e.field !== field.schema);
+  errors.value = errors.value.filter((e) => !_.isEqual(unref(e.field), schema));
 
   if (!res && fieldErrors && fieldErrors.length > 0) {
     // Add errors with this field
     forEach(fieldErrors, (err) => {
       errors.value.push({
-        field: field.schema,
+        field: schema,
         error: err
       });
     });
@@ -184,10 +185,10 @@ const validate = (isAsync?: boolean) => {
   const handleErrors = (errors) => {
     const formErrors = [];
     forEach(errors, (err, i) => {
-      if (isArray(err) && err.length > 0) {
-        forEach(err, (error) => {
+      if (isArray(err.res) && err.res.length > 0) {
+        forEach(err.res, (error) => {
           formErrors.push({
-            field: fields[i].schema,
+            field: err.schema,
             error: error
           });
         });

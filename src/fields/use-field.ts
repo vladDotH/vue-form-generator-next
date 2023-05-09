@@ -12,7 +12,8 @@ import {
   ComponentInternalInstance,
   computed,
   getCurrentInstance,
-  ref
+  ref,
+  unref
 } from "vue";
 import { FieldEmits, FieldProps, FieldSchema } from "./fields";
 import { slugifyFormID } from "../utils/schema";
@@ -71,7 +72,7 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
                 errors.value.push(...err);
               }
               const isValid = errors.value.length === 0;
-              emit("validated", isValid, errors.value, instance);
+              emit("validated", isValid, errors.value, unref(props.schema));
             });
           } else if (result) {
             results = results.concat(result);
@@ -100,17 +101,20 @@ export const useField = (props: FieldProps, emit: FieldEmits) => {
 
       const isValid = fieldErrors.length === 0;
       if (!calledParent) {
-        emit("validated", isValid, fieldErrors, instance);
+        emit("validated", isValid, fieldErrors, unref(props.schema));
       }
       errors.value = fieldErrors;
       return fieldErrors;
     };
 
     if (!validateAsync) {
-      return handleErrors(results);
+      return { res: handleErrors(results), schema: unref(props.schema) };
     }
 
-    return Promise.all(results).then(handleErrors);
+    return {
+      res: Promise.all(results).then(handleErrors),
+      schema: unref(props.schema)
+    };
   };
 
   const debouncedValidate = () => {

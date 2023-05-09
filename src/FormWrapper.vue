@@ -134,8 +134,8 @@ function getButtonType(btn) {
 }
 
 // Child field executed validation
-function onFieldValidated(res: any, errors: any[], field: any) {
-  emit("validated", res, errors, field);
+function onFieldValidated(res: any, errors: any[], schema: any) {
+  emit("validated", res, errors, schema);
 }
 
 function buttonVisibility(field: FieldSchema) {
@@ -159,7 +159,7 @@ function onModelUpdated(newVal: any, schema: FieldSchema) {
 }
 
 function validate(calledParent: any) {
-  return child.value.validate?.(calledParent);
+  return child.value?.validate?.(calledParent);
 }
 
 function clearValidationErrors() {
