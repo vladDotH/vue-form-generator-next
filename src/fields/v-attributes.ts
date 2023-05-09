@@ -5,7 +5,7 @@ import { forEach, get, isString } from "lodash";
 function attributesDirective(
   el: Element,
   binding: DirectiveBinding,
-  vnode: VNode<any, any, FieldProps>
+  vnode: VNode
 ) {
   let attrs = vnode?.props?.schema?.attributes ?? {};
   const container = binding.value || "input";
