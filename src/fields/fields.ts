@@ -112,13 +112,13 @@ export interface FieldSchema<M = object, V = any> {
   [key: string]: any;
 }
 
-export interface FieldGroup<M = any> {
+export interface FieldGroup<M = object> {
   legend: string;
   fields: FieldSchema<M>[];
   [key: string]: any;
 }
 
-export interface FormSchema<M = any> {
+export interface FormSchema<M = object> {
   fields: FieldSchema<M>[];
   groups: FieldGroup<M>[];
   [key: string]: any;
