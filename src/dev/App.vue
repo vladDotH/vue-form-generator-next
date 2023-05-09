@@ -15,7 +15,8 @@
 const routes = [
   ["basic", "Basic"],
   ["checklist", "Checklist"],
-  ["core", "Core"]
+  ["core", "Core"],
+  ["full", "Full"]
 ];
 </script>
 
