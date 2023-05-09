@@ -89,7 +89,7 @@ export type VFGValidator = {
   ): any;
 };
 
-const validators: Record<string, VFGValidator> = {
+export const validators: Record<string, VFGValidator> = {
   required(value: any, field: FieldSchema, model: any, messages = resources) {
     return checkEmpty(value, field.required, messages);
   },
