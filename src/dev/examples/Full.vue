@@ -1,15 +1,8 @@
 <template>
+  <h1>Full</h1>
   <div>
-    <div>
-      <div>
-        <div>
-          <button @click="newModel"><i></i>New</button>
-          <button @click="saveModel">
-            <i></i>Save
-            <i v-if="showWarning()">Warning</i>
-          </button>
-          <button @click="deleteModel"><i>Delete</i></button>
-        </div>
+    <div class="row">
+      <div class="col">
         <div>
           <div v-for="(item, index) in validationErrors" :key="index">
             {{ item.field?.label }}:
@@ -27,7 +20,7 @@
           @validated="onValidated"
         ></VueFormGenerator>
       </div>
-      <div class="col-md-6">
+      <div class="col">
         <pre v-if="model" v-html="prettyModel"></pre>
       </div>
     </div>
@@ -69,104 +62,8 @@ const validationErrors = computed(() => {
   return [];
 });
 
-function showWarning() {
-  if (form.value && form.value.errors) {
-    return form.value.errors.length > 0;
-  }
-}
-
-// function selectRow(event, row, add) {
-//     this.isNewModel = false;
-//     if (add || (event && event.ctrlKey)) {
-//         if (this.selected.indexOf(row) !== -1) {
-//             let index = this.selected.indexOf(row);
-//             this.selected.splice(index, 1);
-//         } else {
-//             this.selected.push(row);
-//         }
-//     } else {
-//         this.clearSelection();
-//         this.selected.push(row);
-//     }
-//     this.generateModel();
-// }
-
-function clearSelection() {
-  selected.value.splice(0);
-  generateModel();
-}
-
 function onValidated(res: any, errors: any) {
   console.log("VFG validated:", res, errors);
-}
-
-function generateModel() {
-  if (selected.value.length === 1) {
-    model.value = _.cloneDeep(selected.value[0]);
-  } else if (selected.value.length > 1) {
-    model.value = mergeMultiObjectFields(schema, selected.value);
-  } else {
-    model.value = null;
-  }
-}
-
-function newModel() {
-  console.log("Create new model...");
-  selected.value.splice(0);
-  console.log("VueFormGenerator.schema", VueFormGenerator);
-
-  const newRow = VueFormGenerator.schema.createDefaultObject(schema, {
-    id: getNextID()
-  });
-  isNewModel.value = true;
-  model.value = newRow;
-
-  const el = document.querySelector(
-    "div.form input:nth-child(1):not([readonly]):not(:disabled)"
-  );
-  if (el) el.focus();
-}
-
-function saveModel() {
-  console.log("Save model...");
-  if (!formOptions.value.validateBeforeSave || validate()) {
-    mergeModelValues();
-
-    if (isNewModel.value) {
-      // selectRow(null, model, false);
-    }
-  } else {
-    console.warn("Error saving model...");
-    // Validation error
-  }
-}
-
-function mergeModelValues() {
-  if (model.value && selected.value.length > 0) {
-    _.each(selected.value, (row) => {
-      _.merge(row, model.value);
-    });
-  }
-}
-
-function deleteModel() {
-  if (selected.value.length > 0) {
-    _.each(selected.value, (row) => {
-      // const index = rows.indexOf(row);
-      // rows.splice(index, 1);
-    });
-    clearSelection();
-  }
-}
-
-function getNextID() {
-  let id = 0;
-
-  // _.each(rows, (row) => {
-  //   if (row.id > id) id = row.id;
-  // });
-
-  return ++id;
 }
 
 function validate() {
@@ -176,19 +73,6 @@ function validate() {
 
 function modelUpdated(newVal: any, schema: any) {
   console.log("main model has updated", newVal, schema);
-}
-
-function getLocation(model: any) {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      if (!model.address) model.address = {};
-      if (!model.address.geo) model.address.geo = {};
-      model.address.geo.latitude = pos.coords.latitude.toFixed(5);
-      model.address.geo.longitude = pos.coords.longitude.toFixed(5);
-    });
-  } else {
-    alert("Geolocation is not supported by this browser.");
-  }
 }
 
 const schema = {
@@ -738,4 +622,12 @@ const schema = {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.row {
+  display: flex;
+}
+.col {
+  width: 50%;
+  padding: 0 2em;
+}
+</style>
