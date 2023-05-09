@@ -39,6 +39,7 @@
 <script setup lang="ts">
 import { get as objGet, forEach, isFunction, isNil, isArray } from "lodash";
 import {
+  FormExpose,
   FormProps,
   FormPropsObject,
   WrapperProps,
@@ -213,6 +214,8 @@ const clearValidationErrors = () => {
     child.clearValidationErrors();
   });
 };
+
+defineExpose<FormExpose>({ errors, validate, clearValidationErrors });
 </script>
 
 <style lang="scss">
