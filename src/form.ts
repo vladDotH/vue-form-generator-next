@@ -1,5 +1,5 @@
 import { FieldSchema, FormOptions, FormSchema } from "./fields/fields";
-import { PropType } from "vue";
+import { PropType, Ref } from "vue";
 
 export interface FormProps {
   schema: FormSchema;
@@ -69,3 +69,9 @@ export const WrapperPropsObject = {
     default: () => []
   }
 };
+
+export interface FormExpose {
+  errors: Ref<any>;
+  validate: (isAsync?: boolean) => any[] | boolean | Promise<any[] | boolean>;
+  clearValidationErrors: () => void;
+}
