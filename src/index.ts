@@ -1,10 +1,11 @@
-import component from "./FormGenerator.vue";
+import component from "./VueFormGenerator.vue";
 import * as schema from "./utils/schema";
 import validators from "./utils/validators";
 import fieldComponents from "./utils/fieldsLoader";
 import { FieldSchema } from "./fields/fields";
 import { App } from "vue";
 import { vAttributes } from "./fields/v-attributes";
+import VueFormGenerator from "@/VueFormGenerator.vue";
 
 export type ValidatorFunction<M = any, V = any> = (
   value: V,
@@ -17,6 +18,12 @@ export interface VFGPluginOptions {
   validators: {
     [key: string]: ValidatorFunction;
   };
+}
+
+declare module "vue" {
+  export interface GlobalComponents {
+    VueFormGenerator: typeof VueFormGenerator;
+  }
 }
 
 const install = (app: App, options?: VFGPluginOptions) => {
