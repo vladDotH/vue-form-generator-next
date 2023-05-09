@@ -36,7 +36,7 @@ const getMultipleFields = (schema: FormSchema) => {
 };
 
 // Merge many models to one 'work model' by schema
-const mergeMultiObjectFields = (schema: FormSchema, objs: any[]) => {
+const mergeMultiObjectFields = (schema: FormSchema | any, objs: any[]) => {
   const model = {};
 
   const fields = getMultipleFields(schema);
