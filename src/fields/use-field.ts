@@ -16,7 +16,7 @@ import {
   unref
 } from "vue";
 import { FieldEmits, FieldProps, FieldSchema } from "./fields";
-import { slugifyFormID } from "../utils/schema";
+import { slugifyFormID } from "@/utils/schema";
 import { convertValidator } from "./util";
 
 // TODO: drop context binding to onValidated, validators & inside emit('validated')
