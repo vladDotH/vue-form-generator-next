@@ -101,7 +101,7 @@ const {
 function fieldTypeHasLabel(field: FieldSchema) {
   if (isNil(field.label)) return false;
 
-  let relevantType = "";
+  let relevantType: any = "";
   if (field.type === "input") {
     relevantType = field.inputType;
   } else {
@@ -124,12 +124,12 @@ function getFieldID(schema: FieldSchema) {
 }
 
 // Get type of field 'field-xxx'. It'll be the name of HTML element
-function getFieldType(fieldSchema) {
+function getFieldType(fieldSchema: any) {
   return "Field-" + fieldSchema.type;
 }
 
 // Get type of button, default to 'button'
-function getButtonType(btn) {
+function getButtonType(btn: any) {
   return btn.type ?? "button";
 }
 

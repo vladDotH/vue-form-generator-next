@@ -173,7 +173,7 @@ const validate = (isAsync?: boolean) => {
   clearValidationErrors();
 
   const fields = [];
-  const results = [];
+  const results: any[] = [];
 
   forEach(children.value, (child: any) => {
     if (isFunction(child.validate)) {
@@ -182,8 +182,8 @@ const validate = (isAsync?: boolean) => {
     }
   });
 
-  const handleErrors = (errors) => {
-    const formErrors = [];
+  const handleErrors = (errors: any) => {
+    const formErrors: any[] = [];
     forEach(errors, (err, i) => {
       if (isArray(err.res) && err.res.length > 0) {
         forEach(err.res, (error) => {
